@@ -1,0 +1,56 @@
+@import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
+
+@font-face{
+    font-family: Montserrat;
+    src: url('fonts/Montserrat-Regular.otf');
+}
+
+@font-face{
+    font-family: OpenSans;
+    src: url('fonts/OpenSans-Regular.ttf');
+}
+
+body{
+    font-family: OpenSans;
+    font-size: 4em;
+}
+
+.content {
+  @include make-row();
+}
+
+.dropzone {
+  height: 150px;
+  width: 200px;
+  background-color: white;
+  border: dashed 4px transparent;
+  border-radius: 4px;
+  border-color: #ccc;
+  transition: background-color 0.3s, border-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropzone-active {
+  border-color: #666;
+}
+
+.dropzone-targeted {
+  background-color: #ccc;
+}
+
+img{
+    max-height: 150px;
+    max-width: 200px;
+    z-index: 1;
+}
+
+h1{
+  font-family: Montserrat;
+  font-size: 2em;
+}
+
+footer{
+    padding-bottom: 20px;
+}
