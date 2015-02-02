@@ -1,0 +1,8 @@
+<template name="index">
+  {{#each images}}
+  <div class="col-sm-4">
+    <img class="draggable img-rounded" src="{{path}}"/>
+  </div>
+  {{/each}}
+  {{>dropzoneSection}}
+</template>

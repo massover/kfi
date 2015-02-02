@@ -1,4 +1,24 @@
-// target elements with the "draggable" class
+Template.index.helpers({
+    images: function(){
+        return Images.find();
+    }
+});
+
+Template.index.rendered = function() {
+    $('img').mousedown(function(){
+        $('img').css('z-index','1');
+        $(this).css('z-index','2');
+        dropzoneId = $(this).attr('in-dropzone');
+        if (typeof dropzoneId !== typeof undefined && dropzoneId !== false) {
+            $(this).removeAttr('in-dropzone');
+            $('#' + dropzoneId).removeAttr('blocked');
+
+        }
+    });
+};
+
+
+// target elements with the "draggable" class 
 interact('.draggable')
   .draggable({
     // enable inertial throwing
@@ -60,7 +80,7 @@ interact('.dropzone:not([blocked])').dropzone({
       anchors: [ dropCenter ]
     });
     event.target.textContent = '';
-    dropzoneLabel = event.target.parentNode.childNodes[3];
+    dropzoneLabel = event.target.parentNode.childNodes[1];
     dropzoneLabel.textContent = event.target.getAttribute('id');
 
   },
@@ -69,7 +89,7 @@ interact('.dropzone:not([blocked])').dropzone({
     event.draggable.snap(false);
     event.target.classList.remove('dropzone-targeted');
     event.target.textContent = event.target.getAttribute('id');
-    dropzoneLabel = event.target.parentNode.childNodes[3];
+    dropzoneLabel = event.target.parentNode.childNodes[1];
     dropzoneLabel.textContent = '\xA0';
 
   },
@@ -92,15 +112,4 @@ interact('.dropzone:not([blocked])').dropzone({
 
 });
 
-$(function() {
-    $('img').mousedown(function(){
-        $('img').css('z-index','1');
-        $(this).css('z-index','2');
-        dropzoneId = $(this).attr('in-dropzone');
-        if (typeof dropzoneId !== typeof undefined && dropzoneId !== false) {
-            $(this).removeAttr('in-dropzone');
-            $('#' + dropzoneId).removeAttr('blocked');
-        }
-    });
 
-});
