@@ -1,8 +1,43 @@
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * ((max-1) - min + 1)) + min;
+}
+
 Template.index.helpers({
-    images: function(){
-        return Images.find();
+    people: function(){
+        cursor = People.find(); 
+        num_people = cursor.count();
+        first_random_number = getRandomInt(0, num_people);
+        second_random_number = getRandomInt(0, num_people);
+        while (first_random_number == second_random_number){
+            second_random_number = getRandomInt(0, num_people);
+        } 
+        people = cursor.fetch();
+        return [ 
+            people[first_random_number], 
+            people[second_random_number] 
+        ];
     }
 });
+
+
+function getResultAndAddToDB(){
+    var result = [];
+    $('img[in-dropzone]').each(function(){
+        decision = $(this).attr('in-dropzone');
+        name = $(this).attr('name');
+        id = $(this).attr('id');
+        result.push({
+            id: id, 
+            name: name,
+            decision: decision
+        });
+    });
+    Meteor.call('resultInsert', result, function() {
+        console.log('i made it');
+
+    });
+}
 
 Template.index.rendered = function() {
     $('img').mousedown(function(){
@@ -79,7 +114,9 @@ Template.index.rendered = function() {
         });
         event.target.textContent = '';
         dropzoneLabel = event.target.parentNode.childNodes[1];
-        dropzoneLabel.textContent = event.target.getAttribute('id');
+        choice = event.target.getAttribute('id');
+        dropzoneLabel.textContent = choice;
+        event.relatedTarget.setAttribute('choice',choice);
     
       },
       ondragleave: function (event) {
@@ -99,7 +136,7 @@ Template.index.rendered = function() {
           anchors: []
         });
         if ($('img[in-dropzone]').length == 3){
-            console.log('done');
+            getResultAndAddToDB();
         };
       },
       ondropdeactivate: function (event) {

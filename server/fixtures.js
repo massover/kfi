@@ -1,11 +1,10 @@
-if (Images.find().count() === 0){
-    Images.insert({
-        path: 'images/image1.jpg'
+if (People.find().count() === 0){
+    People.insert({
+        img_path: 'images/adolf_hitler.jpg',
+        name: 'Adolf Hitler'
     });
-    Images.insert({
-        path: 'images/image2.jpg'
-    });
-    Images.insert({
-        path: 'images/obama.png'
+    People.insert({
+        img_path: 'images/george_w_bush.jpg',
+        name: 'George W Bush'
     });
 }

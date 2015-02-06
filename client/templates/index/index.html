@@ -1,10 +1,13 @@
 <template name="index">
   <div class="content">
-    {{#each images}}
+    {{#each people}}
     <div class="col-sm-4">
-      <img class="draggable img-rounded" src="{{path}}"/>
+      <img class="draggable img-rounded" id="{{_id}}" name="{{name}}" src="{{img_path}}"/>
     </div>
     {{/each}}
+    <div class="col-sm-4">
+      <img class="draggable img-rounded" id="obama" name="Barack Obama" src="images/barack_obama.png"/>
+    </div>
     {{>dropzoneSection}}
   </div>
 </template>
