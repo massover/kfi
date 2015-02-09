@@ -1,42 +1,86 @@
-
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * ((max-1) - min + 1)) + min;
 }
 
-Template.index.helpers({
-    people: function(){
-        cursor = People.find(); 
-        num_people = cursor.count();
-        first_random_number = getRandomInt(0, num_people);
+
+function getTwoRandomPeople() {
+    cursor = People.find(); 
+    num_people = cursor.count();
+    first_random_number = getRandomInt(0, num_people);
+    second_random_number = getRandomInt(0, num_people);
+    while (first_random_number == second_random_number){
         second_random_number = getRandomInt(0, num_people);
-        while (first_random_number == second_random_number){
-            second_random_number = getRandomInt(0, num_people);
-        } 
-        people = cursor.fetch();
-        return [ 
-            people[first_random_number], 
-            people[second_random_number] 
-        ];
+    } 
+    people = cursor.fetch();
+    return [ 
+        people[first_random_number], 
+        people[second_random_number] 
+    ];
+}
+
+function findOrInsertOutcome(people){
+    var outcome = Outcomes.findOne({
+        $and : [{
+            people: {
+                $elemMatch: {
+                    personId: 'obama'
+                }
+            }
+        },{
+            people: {
+                $elemMatch: {
+                    personId: people[0]._id
+                }
+            }
+        },{
+            people: {
+                $elemMatch: {
+                    personId: people[1]._id
+                }
+            }
+        }]
+    });
+    if (!outcome){
+        Meteor.call('outcomeInsert', people, function(error, outcome){
+            if (error)
+                return alert(error.reason);
+            var outcome = outcome;
+        });
     }
+    return outcome;
+
+}
+
+// Ideally I want to do something like this
+Template.index.helpers({
+    data : function(){
+        people = getTwoRandomPeople();
+        outcome = findOrInsertOutcome(people);
+        return {people:people, outcome:outcome};
+    }
+    
 });
 
 
 function getResultAndAddToDB(){
-    var result = [];
+    var people = [];
+    outcomeId = $('input').val();
+    console.log(outcomeId);
     $('img[in-dropzone]').each(function(){
         decision = $(this).attr('in-dropzone');
-        name = $(this).attr('name');
-        id = $(this).attr('id');
-        result.push({
-            id: id, 
+        name = $(this).attr('data-name');
+        personId = $(this).attr('data-personId');
+        people.push({
+            personId: personId, 
             name: name,
-            decision: decision
+            decision: decision,
         });
     });
-    Meteor.call('resultInsert', result, function() {
-        console.log('i made it');
-
+    Meteor.call('outcomeUpdate', people, outcomeId, function(error){
+        if (error)
+            return alert(error.message);
     });
+    
 }
 
 Template.index.rendered = function() {
