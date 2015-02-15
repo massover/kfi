@@ -1,5 +1,9 @@
 if (People.find().count() === 0){
     People.insert({
+        img_path: 'images/barack_obama.png',
+        name: 'Barack Obama'
+    });
+    People.insert({
         img_path: 'images/adolf_hitler.jpg',
         name: 'Adolf Hitler'
     });

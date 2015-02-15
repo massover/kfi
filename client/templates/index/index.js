@@ -1,129 +1,126 @@
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * ((max-1) - min + 1)) + min;
-}
-
-
-function getTwoRandomPeople() {
-    cursor = People.find(); 
-    num_people = cursor.count();
-    first_random_number = getRandomInt(0, num_people);
-    second_random_number = getRandomInt(0, num_people);
-    while (first_random_number == second_random_number){
-        second_random_number = getRandomInt(0, num_people);
-    } 
-    people = cursor.fetch();
-    return [ 
-        people[first_random_number], 
-        people[second_random_number] 
-    ];
-}
-
-function findOrInsertOutcome(people){
-    var outcome = Outcomes.findOne({
-        $and : [{
-            people: {
-                $elemMatch: {
-                    personId: 'obama'
-                }
-            }
-        },{
-            people: {
-                $elemMatch: {
-                    personId: people[0]._id
-                }
-            }
-        },{
-            people: {
-                $elemMatch: {
-                    personId: people[1]._id
-                }
-            }
-        }]
-    });
-    if (!outcome){
-        Meteor.call('outcomeInsert', people, function(error, outcome){
-            if (error)
-                return alert(error.reason);
-            var outcome = outcome;
-        });
-    }
-    return outcome;
-
-}
-
-// Ideally I want to do something like this
 Template.index.helpers({
     data : function(){
-        people = getTwoRandomPeople();
+        people = getPeople();
         outcome = findOrInsertOutcome(people);
         return {people:people, outcome:outcome};
     }
     
 });
 
+function getPeople() {
+    var count = People.find().count();
+    var obama = People.findOne({name: 'Barack Obama'});
+    var random_index = Math.floor(Math.random() * (count-1));
+    var first_random_person = People.findOne(
+        {_id: {$ne: obama._id}},
+        {skip:random_index}
+    );
+    random_index = Math.floor(Math.random() * (count-2));
+    var second_random_person = People.findOne(
+        {_id: {$nin: [obama._id,first_random_person._id]}},
+        {skip:random_index}
+    );
+    return [ 
+        first_random_person,
+        second_random_person,
+        obama
+    ];
+}
 
-function getResultAndAddToDB(){
-    var people = [];
-    outcomeId = $('input').val();
-    console.log(outcomeId);
+function findOrInsertOutcome(people){
+    var query = { $and : [] };
+    for (var index in people){
+        person = people[index];
+        query.$and.push({
+            people: {
+                $elemMatch: {
+                    personId: person._id
+                }
+            }
+        });
+    }
+    console.log(query);
+    var outcome = Outcomes.findOne(query)
+    if (!outcome){ 
+        console.log('no outcome');
+        Meteor.call('outcomeInsert', people, function(error, outcome){
+            if (error)
+                Router.go('index');
+            console.log(outcome);
+        });
+    }
+    return outcome;
+
+}
+
+function getDataForOutcome() {
+    var data = {
+        outcomeId: $('input').val(),
+        people: []
+    };
     $('img[in-dropzone]').each(function(){
         decision = $(this).attr('in-dropzone');
         name = $(this).attr('data-name');
         personId = $(this).attr('data-personId');
-        people.push({
+        data.people.push({
             personId: personId, 
             name: name,
             decision: decision,
         });
     });
-    Meteor.call('outcomeUpdate', people, outcomeId, function(error){
-        if (error)
-            return alert(error.message);
-    });
-    
+    return data;
 }
 
-Template.index.rendered = function() {
-    $('img').mousedown(function(){
+Template.index.events({
+    "mousedown img": function (event) {
         $('img').css('z-index','1');
-        $(this).css('z-index','2');
-        dropzoneId = $(this).attr('in-dropzone');
-        if (typeof dropzoneId !== typeof undefined && dropzoneId !== false) {
-            $(this).removeAttr('in-dropzone');
-            $('#' + dropzoneId).removeAttr('blocked');
-
+        img = event.target;
+        img.style.zIndex = 2;
+        dropzoneId = img.getAttribute('in-dropzone');
+        if (dropzoneId){
+            img.removeAttribute('in-dropzone');
+            document.getElementById(dropzoneId).removeAttribute('blocked');
         }
-    });
+    },
 
-    // target elements with the "draggable" class 
-    interact('.draggable')
-      .draggable({
-        // enable inertial throwing
+    "submit form": function (event){
+        event.preventDefault();
+        if ($('img[in-dropzone]').length != 3){
+            return alert('Please drag all images into dropzones');
+        }
+        var data = getDataForOutcome();
+        console.log('submit');
+        Meteor.call('outcomeUpdate', data.people, data.outcomeId, function(error){
+            if (error)
+                return alert('Error writing into the database, please try again');
+            console.log('pls route');
+            Router.go('outcomes',{_id: data.outcomeId});
+        });
+    }
+});
+
+Template.index.rendered = function() {
+    interact('.draggable').draggable({
         inertia: true,
-        // keep the element within the area of it's parent
         restrict: {
           restriction: '.content',
           endOnly: true,
           elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
         },
     
-        // call this function on every dragmove event
         onmove: function (event) {
           var target = event.target,
-              // keep the dragged position in the data-x/data-y attributes
               x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
               y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
     
-          // translate the element
           target.style.webkitTransform =
           target.style.transform =
             'translate(' + x + 'px, ' + y + 'px)';
     
-          // update the posiion attributes
           target.setAttribute('data-x', x);
           target.setAttribute('data-y', y);
         }
-      });
+    });
     
     
     interact('.draggable').snap({
@@ -135,17 +132,11 @@ Template.index.rendered = function() {
     });
     
     interact('.dropzone:not([blocked])').dropzone({
-      // only accept elements matching this CSS selector
-      // Require a 75% element overlap for a drop to be possible
       overlap: 0.40,
-    
-      // listen for drop related events:
       ondropactivate: function (event) {
-        // add active dropzone feedback
         event.target.classList.add('dropzone-active');
       },
       ondragenter: function (event) {
-        // feedback the possibility of a drop
         event.target.classList.add('dropzone-targeted');
         var dropRect = interact.getElementRect(event.target),
             dropCenter = {
@@ -164,7 +155,6 @@ Template.index.rendered = function() {
     
       },
       ondragleave: function (event) {
-        // remove the drop feedback style
         event.draggable.snap(false);
         event.target.classList.remove('dropzone-targeted');
         event.target.textContent = event.target.getAttribute('id');
@@ -179,9 +169,6 @@ Template.index.rendered = function() {
         event.draggable.snap({
           anchors: []
         });
-        if ($('img[in-dropzone]').length == 3){
-            getResultAndAddToDB();
-        };
       },
       ondropdeactivate: function (event) {
         // remove active dropzone feedback
