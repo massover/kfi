@@ -39,14 +39,12 @@ function findOrInsertOutcome(people){
             }
         });
     }
-    console.log(query);
-    var outcome = Outcomes.findOne(query)
+    var outcome = Outcomes.findOne(query);
     if (!outcome){ 
-        console.log('no outcome');
         Meteor.call('outcomeInsert', people, function(error, outcome){
             if (error)
                 Router.go('index');
-            console.log(outcome);
+            var outcome = outcome;
         });
     }
     return outcome;
@@ -89,11 +87,9 @@ Template.index.events({
             return alert('Please drag all images into dropzones');
         }
         var data = getDataForOutcome();
-        console.log('submit');
         Meteor.call('outcomeUpdate', data.people, data.outcomeId, function(error){
             if (error)
                 return alert('Error writing into the database, please try again');
-            console.log('pls route');
             Router.go('outcomes',{_id: data.outcomeId});
         });
     }
@@ -171,7 +167,6 @@ Template.index.rendered = function() {
         });
       },
       ondropdeactivate: function (event) {
-        // remove active dropzone feedback
         event.target.classList.remove('dropzone-active');
         event.target.classList.remove('dropzone-targeted');
       }
