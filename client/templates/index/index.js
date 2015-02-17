@@ -90,7 +90,7 @@ Template.index.events({
         Meteor.call('outcomeUpdate', data.people, data.outcomeId, function(error){
             if (error)
                 return alert('Error writing into the database, please try again');
-            Router.go('outcomes',{_id: data.outcomeId});
+            Router.go('outcomes',{_id: data.outcomeId, hello:'world'});
         });
     }
 });
