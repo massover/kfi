@@ -1,17 +1,22 @@
 <template name="index">
   <div class="content">
-    <input type="hidden" value="{{data.outcome._id}}"/>
-    {{#each data.people}}
-    <div class="col-sm-4">
-      <img 
-        class="draggable img-rounded" src="{{img_path}}"
-        data-name="{{name}}" data-personId="{{_id}}"
-      />
+    {{#each data}}
+    <div class="row">
+      <div class="col-xs-6">
+        <div>{{name}}</div>
+        <img 
+          class="draggable img-rounded" src="{{img_path}}"
+          data-name="{{name}}" data-personId="{{_id}}"
+        />
+      </div>
+      <div class="col-xs-6">
+        <div>&nbsp;</div>
+        <div id="{{choice}}" class="dropzone {{choice}}">{{choice}}</div>
+      </div>
     </div>
     {{/each}}
-    {{>dropzoneSection}}
-    <form>
-      <input type="submit" value="Submit" class="btn btn-primary"/>
+    <form class="form">
+      <input type="submit" value="Submit" class="btn btn-custom"/>
     </form>
   </div>
 </template>

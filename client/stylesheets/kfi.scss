@@ -1,5 +1,7 @@
 @import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
 
+$brand-primary: #8C2318;
+
 @font-face{
     font-family: Montserrat;
     src: url('fonts/Montserrat-Regular.otf');
@@ -10,9 +12,11 @@
     src: url('fonts/OpenSans-Regular.ttf');
 }
 
+
 body{
+    text-align: center;
     font-family: OpenSans;
-    font-size: 4em;
+    font-size: 3em;
     background: url('images/flag-wallpaper.jpg') no-repeat center center;
     background-size: cover;
 }
@@ -24,6 +28,8 @@ body{
 .dropzone {
   height: 150px;
   width: 200px;
+  margin-right: auto;
+  margin-left: auto;
   background-color: transparent;
   border: dashed 4px transparent;
   border-radius: 4px;
@@ -54,9 +60,21 @@ h1{
 }
 
 footer{
-    padding-bottom: 20px;
+    //padding-bottom: 20px;
+}
+
+form{
+    padding-top: 50px;
 }
 
 .progress-bar{
     color: #333;
 }
+
+.btn-custom{
+    @include button-variant(white, $brand-primary, $brand-primary);
+    padding: 30px 60px 30px 60px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+

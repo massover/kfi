@@ -1,13 +1,11 @@
 Template.index.helpers({
-    data : function(){
-        people = getPeople();
-        outcome = findOrInsertOutcome(people);
-        return {people:people, outcome:outcome};
-    }
+    data : function() {
+        return getData();
+    },
     
 });
 
-function getPeople() {
+function getData() {
     var count = People.find().count();
     var obama = People.findOne({name: 'Barack Obama'});
     var random_index = Math.floor(Math.random() * (count-1));
@@ -20,10 +18,10 @@ function getPeople() {
         {_id: {$nin: [obama._id,first_random_person._id]}},
         {skip:random_index}
     );
-    return [ 
-        first_random_person,
-        second_random_person,
-        obama
+    return [
+        _.extend(first_random_person, {choice:'kill'}),
+        _.extend(second_random_person, {choice: 'fuck'}),
+        _.extend(obama, {choice: 'impeach'})
     ];
 }
 
