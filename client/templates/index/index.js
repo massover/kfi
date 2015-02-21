@@ -49,22 +49,17 @@ function findOrInsertOutcome(people){
 
 }
 
-function getDataForOutcome() {
-    var data = {
-        outcomeId: $('input').val(),
-        people: []
-    };
+function getOutcome() {
+    var outcome = { people: [] };
     $('img[in-dropzone]').each(function(){
         decision = $(this).attr('in-dropzone');
-        name = $(this).attr('data-name');
         personId = $(this).attr('data-personId');
-        data.people.push({
+        outcome.people.push({
             personId: personId, 
-            name: name,
             decision: decision,
         });
     });
-    return data;
+    return outcome;
 }
 
 Template.index.events({
@@ -84,11 +79,11 @@ Template.index.events({
         if ($('img[in-dropzone]').length != 3){
             return alert('Please drag all images into dropzones');
         }
-        var data = getDataForOutcome();
-        Meteor.call('outcomeUpdate', data.people, data.outcomeId, function(error){
+        var outcome = getOutcome();
+        Meteor.call('outcomeInsert', outcome, function(error,result){
             if (error)
                 return alert('Error writing into the database, please try again');
-            Router.go('outcomes',{_id: data.outcomeId, hello:'world'});
+            Router.go('outcomes',{_id: result._id});
         });
     }
 });
