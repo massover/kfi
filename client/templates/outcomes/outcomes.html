@@ -2,9 +2,11 @@
   {{#each people}}
   <div class="row" style="padding-bottom: 10px">
   <div class="col-xs-6">
+    <div>{{decision}} {{name}}</div>
     <img class="img-rounded" src="{{img_path}}"/>
   </div>
   <div class="col-xs-6">
+    <div>&nbsp;</div>
     <div class="progress">
       <div class="progress-bar progress-bar-danger" role="progressbar" 
           aria-valuenow="{{kill_percentage}}" aria-valuemin="0"

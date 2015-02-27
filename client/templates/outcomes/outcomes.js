@@ -1,6 +1,16 @@
 Template.outcomes.helpers({
     people: function(){
-        people = this.people;
+        people = [];
+        order = ['kill', 'fuck', 'impeach'];
+        for (var index in order){
+            decision = order[index];
+            for (var index in this.people) {
+                person = this.people[index];
+                if (person.decision == decision){
+                    people.push(person);
+                }
+            }
+        }
         var counts = {};
         for (var index in people){
             person = People.findOne({_id: people[index].personId});
