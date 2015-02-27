@@ -25,30 +25,6 @@ function getData() {
     ];
 }
 
-function findOrInsertOutcome(people){
-    var query = { $and : [] };
-    for (var index in people){
-        person = people[index];
-        query.$and.push({
-            people: {
-                $elemMatch: {
-                    personId: person._id
-                }
-            }
-        });
-    }
-    var outcome = Outcomes.findOne(query);
-    if (!outcome){ 
-        Meteor.call('outcomeInsert', people, function(error, outcome){
-            if (error)
-                Router.go('index');
-            var outcome = outcome;
-        });
-    }
-    return outcome;
-
-}
-
 function getOutcome() {
     var outcome = { people: [] };
     $('img[in-dropzone]').each(function(){
@@ -96,7 +72,27 @@ Template.index.rendered = function() {
           endOnly: true,
           elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
         },
-    
+   
+        onstart: function (event) {
+            var x = event.target.getAttribute('data-x-start-pos');
+            var y = event.target.getAttribute('data-y-start-pos');
+            if (!x && !y) {
+                var rect = interact.getElementRect(event.target);
+                startPos = {
+                    x: rect.left + rect.width  / 2,
+                    y: rect.top  + rect.height / 2
+                }
+                x = startPos.x;
+                y = startPos.y;
+                event.target.setAttribute('data-x-start-pos', startPos.x);
+                event.target.setAttribute('data-y-start-pos', startPos.y);
+            }
+            else{
+                x = parseInt(x, 10);
+                y = parseInt(y, 10);
+            }
+            event.interactable.snap({ anchors: [{x:x,y:y}] });
+        }, 
         onmove: function (event) {
           var target = event.target,
               x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -139,25 +135,30 @@ Template.index.rendered = function() {
         event.target.textContent = '';
         dropzoneLabel = event.target.parentNode.childNodes[1];
         choice = event.target.getAttribute('id');
-        dropzoneLabel.textContent = choice;
+        name = event.relatedTarget.getAttribute('data-name');
+        dropzoneLabel.textContent = choice + ' ' + name;
         event.relatedTarget.setAttribute('choice',choice);
+        nameDiv = event.relatedTarget.parentNode.childNodes[1];
+        nameDiv.style.visibility = "hidden";
     
       },
       ondragleave: function (event) {
-        event.draggable.snap(false);
+        var x = event.relatedTarget.getAttribute('data-x-start-pos');
+        var y = event.relatedTarget.getAttribute('data-y-start-pos');
+        x = parseInt(x,10);
+        y = parseInt(y,10);
+        nameDiv = event.relatedTarget.parentNode.childNodes[1];
+        nameDiv.style.visibility = "visible";
+        event.draggable.snap({ anchors: [{x:x,y:y}] });
         event.target.classList.remove('dropzone-targeted');
         event.target.textContent = event.target.getAttribute('id');
         dropzoneLabel = event.target.parentNode.childNodes[1];
         dropzoneLabel.textContent = '\xA0';
-    
       },
       ondrop: function (event) {
         event.target.setAttribute('blocked', '');
         dropzoneId = event.target.getAttribute('id');
         event.relatedTarget.setAttribute('in-dropzone',dropzoneId);
-        event.draggable.snap({
-          anchors: []
-        });
       },
       ondropdeactivate: function (event) {
         event.target.classList.remove('dropzone-active');

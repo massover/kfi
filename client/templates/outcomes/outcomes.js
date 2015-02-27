@@ -62,12 +62,8 @@ Template.outcomes.helpers({
             });
 
         }
-        console.log(people);
         return people;
     }
 
 });
 
-function getPercentages(counts,total_outcomes){
-    
-}
