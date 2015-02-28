@@ -1,22 +1,21 @@
 <template name="index">
   <div class="content">
-    {{#each data}}
-    <div class="row">
-      <div class="col-xs-6">
-        <div>{{name}}</div>
-        <img 
-          class="draggable img-rounded" src="{{img_path}}"
-          data-name="{{name}}" data-personId="{{_id}}"
-          data-x-start-pos="" data-y-start-pos=""
-        />
-      </div>
-      <div class="col-xs-6">
-        <div>&nbsp;</div>
-        <div id="{{choice}}" class="dropzone {{choice}}">{{choice}}</div>
-      </div>
+    {{#each people}}
+    <div class="person">
+      <form>
+        <div class="form-group">
+          <select class="form-control" data-personId="{{_id}}">
+            <option disabled selected>{{name}}</option>
+            <option data-decision="kill">kill {{name}}</option>
+            <option data-decision="fuck">fuck {{name}}</option>
+            <option data-decision="impeach">impeach {{name}}</option>
+          </select>
+        </div>
+      </form>
+      <img class="img-responsive img-rounded" src="{{img_path}}"/>
     </div>
     {{/each}}
-    <form class="form">
+    <form>
       <input type="submit" value="Submit" class="btn btn-custom"/>
     </form>
   </div>
