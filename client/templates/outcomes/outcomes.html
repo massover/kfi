@@ -1,31 +1,38 @@
 <template name="outcomes">
   {{#each people}}
   <div class="row" style="padding-bottom: 10px">
-  <div class="col-xs-6">
-    <div>{{decision}} {{name}}</div>
-    <img class="img-rounded" src="{{img_path}}"/>
-  </div>
-  <div class="col-xs-6">
-    <div>&nbsp;</div>
-    <div class="progress">
-      <div class="progress-bar progress-bar-danger" role="progressbar" 
-          aria-valuenow="{{kill_percentage}}" aria-valuemin="0"
-          aria-valuemax="100" style="width: {{kill_percentage}}%;"
-      >Kill:&nbsp;{{kill_percentage}}%</div>
+    <div class="col-xs-6">
+      <div>{{decision}} {{name}}</div>
+      <img class="img-rounded" src="{{img_path}}"/>
     </div>
-    <div class="progress">
-      <div class="progress-bar progress-bar-success" role="progressbar" 
-          aria-valuenow="{{fuck_percentage}}" aria-valuemin="0"
-          aria-valuemax="100" style="width: {{fuck_percentage}}%;"
-      >Fuck:&nbsp;{{fuck_percentage}}%</div>
+    <div class="col-xs-6">
+      <div>&nbsp;</div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-danger" role="progressbar" 
+            aria-valuenow="{{kill_percentage}}" aria-valuemin="0"
+            aria-valuemax="100" style="width: {{kill_percentage}}%;"
+        >Kill:&nbsp;{{kill_percentage}}%</div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" 
+            aria-valuenow="{{fuck_percentage}}" aria-valuemin="0"
+            aria-valuemax="100" style="width: {{fuck_percentage}}%;"
+        >Fuck:&nbsp;{{fuck_percentage}}%</div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" 
+            aria-valuenow="{{impeach_percentage}}" aria-valuemin="0"
+            aria-valuemax="100" style="width: {{impeach_percentage}}%;"
+        >Impeach:&nbsp;{{impeach_percentage}}%</div>
+      </div>
     </div>
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" 
-          aria-valuenow="{{impeach_percentage}}" aria-valuemin="0"
-          aria-valuemax="100" style="width: {{impeach_percentage}}%;"
-      >Impeach:&nbsp;{{impeach_percentage}}%</div>
-    </div>
-  </div>
   </div>
   {{/each}}
+  <div class="row">
+    <form class="form">
+      <button type="submit" class="btn btn-custom">
+        <i class="fa fa-repeat"></i> Again
+      </button>
+    </form>
+  </div>
 </template>

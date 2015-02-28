@@ -77,3 +77,10 @@ Template.outcomes.helpers({
 
 });
 
+
+Template.outcomes.events({
+    "submit form": function (event) {
+        event.preventDefault();
+        Router.go('index');
+    }
+});
