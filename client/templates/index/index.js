@@ -51,6 +51,11 @@ Template.index.events({
             outcome.people[1].decision == outcome.people[2].decision){
             return alert('Please enter unique decisions for all people');
         }
+        for (var index in outcome.people){
+            if (!outcome.people[index].decision) {
+                return alert('Please enter decisions for all people');
+            }
+        }
         Meteor.call('outcomeInsert', outcome, function(error,result){
             if (error)
                 return alert('Error writing into the database, please try again');
