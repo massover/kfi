@@ -1,29 +1,39 @@
 <template name="outcomes">
+  <div class="row">
+    <div class="col-xs-6">
+      <h2>Your Results</h2>
+      <hr>
+    </div>
+    <div class="col-xs-6">
+      <h2>Total Results</h2>
+      <hr>
+    </div>
+  </div>
   {{#each people}}
   <div class="row" style="padding-bottom: 10px">
-    <div class="col-sm-6">
+    <div class="col-xs-6">
       <div>{{decision}} {{name}}</div>
       <img class="img-responsive img-rounded" src="{{img_path}}"/>
     </div>
-    <div class="col-sm-6">
+    <div class="col-xs-6">
       <div>&nbsp;</div>
       <div class="progress">
         <div class="progress-bar progress-bar-danger" role="progressbar" 
             aria-valuenow="{{kill_percentage}}" aria-valuemin="0"
             aria-valuemax="100" style="width: {{kill_percentage}}%;"
-        >Kill:&nbsp;{{kill_percentage}}%</div>
+        >&nbsp;Kill:&nbsp;{{kill_percentage}}%</div>
       </div>
       <div class="progress">
-        <div class="progress-bar progress-bar-success" role="progressbar" 
+        <div class="progress-bar progress-bar-custom" role="progressbar" 
             aria-valuenow="{{fuck_percentage}}" aria-valuemin="0"
             aria-valuemax="100" style="width: {{fuck_percentage}}%;"
-        >Fuck:&nbsp;{{fuck_percentage}}%</div>
+        >&nbsp;Fuck:&nbsp;{{fuck_percentage}}%</div>
       </div>
       <div class="progress">
         <div class="progress-bar" role="progressbar" 
             aria-valuenow="{{impeach_percentage}}" aria-valuemin="0"
             aria-valuemax="100" style="width: {{impeach_percentage}}%;"
-        >Impeach:&nbsp;{{impeach_percentage}}%</div>
+        >&nbsp;Impeach:&nbsp;{{impeach_percentage}}%</div>
       </div>
     </div>
   </div>

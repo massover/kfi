@@ -17,10 +17,17 @@ $brand-primary: #0B486B;
 body{
     text-align: center;
     font-family: OpenSans;
-    font-size: 3em;
+    font-size: 300%;
     background: url('images/flag-wallpaper.jpg') no-repeat center center;
     background-size: cover;
 }
+
+@media (max-width: 769px){
+    body{
+        font-size: 200%;
+    }
+}
+
 
 .content {
   @include make-row();
@@ -33,7 +40,12 @@ body{
 
 h1{
   font-family: Montserrat;
-  font-size: 2em;
+  font-size: 200%;
+}
+
+h2{
+  font-family: Montserrat;
+  font-size: 150%;
 }
 
 img{
@@ -42,10 +54,11 @@ img{
     max-width: 400px;
     max-height: 300px;
 }
+
 @media (max-width: 769px){
     img{
-        max-width: 200px;
-        max-height: 150px;
+        max-width: 160px;
+        max-height: 120px;
     }       
 }
 
@@ -53,14 +66,43 @@ input{
     padding-top: 50px;
 }
 
+.progress{
+    height: 40px;
+    background-color: #ddd;
+    font-size: 100%;
+}
+
 .progress-bar{
     color: #333;
+    line-height: 40px;
+    font-size: 100%;
 }
+
+@media (max-width: 769px){
+    .progress{
+        height: 30px;
+    }
+
+    .progress-bar{
+        line-height: 30px;
+    }
+}
+
+.progress-bar-custom{
+    background-color: #eee;
+}   
 
 .btn-custom{
     @include button-variant(white, $brand-primary, $brand-primary);
     padding: 30px 60px 30px 60px;
     margin-bottom: 20px;
-    font-size: 18px;
+    font-size: 100%;
 }
 
+@media (max-width: 769px){
+
+    .btn-custom{
+        padding: 15px 30px 15px 30px;
+    }
+
+}
