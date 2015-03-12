@@ -15,19 +15,10 @@ $brand-primary: #0B486B;
 
 
 body{
-    text-align: center;
     font-family: OpenSans;
-    font-size: 300%;
     background: url('images/flag-wallpaper.jpg') no-repeat center center;
     background-size: cover;
 }
-
-@media (max-width: 769px){
-    body{
-        font-size: 200%;
-    }
-}
-
 
 .content {
   @include make-row();
@@ -46,6 +37,11 @@ h1{
 h2{
   font-family: Montserrat;
   font-size: 150%;
+}
+
+h3{
+  font-family: Montserrat;
+  font-size: 125%;
 }
 
 img{
@@ -69,11 +65,10 @@ input{
 .progress{
     height: 40px;
     background-color: #ddd;
-    font-size: 100%;
 }
 
 .progress-bar{
-    color: #333;
+    color: #666;
     line-height: 40px;
     font-size: 100%;
 }
@@ -88,21 +83,34 @@ input{
     }
 }
 
-.progress-bar-custom{
+.progress-bar-kill{
+    background-color: lighten(#8C2318, 50%);
+}
+
+.progress-bar-fuck{
     background-color: #eee;
+}
+
+.progress-bar-impeach{
+    background-color: lighten($brand-primary, 50%);
 }   
+
+form{
+    padding-top: 20px;
+}
 
 .btn-custom{
     @include button-variant(white, $brand-primary, $brand-primary);
     padding: 30px 60px 30px 60px;
     margin-bottom: 20px;
-    font-size: 100%;
+    font-size: 150%;
+    
 }
 
 @media (max-width: 769px){
-
     .btn-custom{
         padding: 15px 30px 15px 30px;
+        font-size: 125%;
     }
 
 }

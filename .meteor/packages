@@ -12,3 +12,11 @@ sacha:spin
 fourseven:scss
 underscore
 natestrauser:font-awesome
+accounts-base
+accounts-password
+dburles:collection-helpers
+yogiben:admin
+coffeescript
+aldeed:simple-schema
+aldeed:collection2
+ian:accounts-ui-bootstrap-3
