@@ -15,6 +15,5 @@ Outcomes.attachSchema(Schemas.Outcomes)
 Meteor.methods
     outcomeInsert: (outcome) ->
         outcomeId = Outcomes.insert(outcome)
-        console.log(outcomeId)
         return _id: outcomeId
 

@@ -58,7 +58,7 @@ Template.index.events({
         }
         Meteor.call('outcomeInsert', outcome, function(error,result){
             if (error)
-                return alert('Error writing into the database, please try again');
+                return alert(error.invalidKeys);
             Router.go('outcomes',{_id: result._id});
         });
     }
