@@ -9,7 +9,7 @@
             tableColumns: [
                 {label: 'Image Path', name: 'img_path'}
                 {label: 'Name', name: 'name'}
-                {label: 'Date', name: 'date'}
+                {label: 'Created At', name: 'createdAt'}
                 {label: 'Id', name: '_id'}
             ]
         
