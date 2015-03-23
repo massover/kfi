@@ -1,5 +1,10 @@
 @Schemas = {}
 Schemas.Outcomes = new SimpleSchema
+    createdBy:
+        type: String
+        regEx: SimpleSchema.RegEx.Id
+        autoValue: ->
+            return this.userId()
     people:
         type: [Object]
     "people.$.decision":
